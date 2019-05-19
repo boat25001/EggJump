@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ไข่กลับรัง</title>
+
+    <script type="text/javascript" src="simpleGame.js"></script>
+    <script type="text/javascript">
+
+        var scene;
+        var egg;
+        var blocks = 1;
+        var score =0;
+        function Egg() {
+            tEgg = new Sprite(scene, "Egg.png", 50, 60);
+            tEgg.setSpeed(0);
+            tEgg.setPosition(90, 300);
+            tEgg.falling = true;
+
+
+            tEgg.checkKeys = function () {
+
+                if (keysDown[K_LEFT]){
+                    this.changeXby(-5);
+                }
+
+                if (keysDown[K_RIGHT]){
+                    this.changeXby(5);
+                }
+
+                if (keysDown[K_UP]) {
+
+                    if (tEgg.falling == false && egg.collidesWith(nest) || egg.collidesWith(nest1)) {
+                        this.changeYby(-25);
+                    }
+                }
+
+                if (egg.collidesWith(nest) || egg.collidesWith(nest1)) {
+                    this.changeYby(0.5);
+                }
+                if (!keysDown[K_UP]) {
+                    tEgg.falling = true;
+                }
+                if (tEgg.y <= 400) {
+                    tEgg.falling = true;
+                }
+
+            }
+
+
+            tEgg.checkDrag = function () {
+
+                if (egg.collidesWith(nest)) {
+
+                    tEgg.falling = false;
+
+                }
+
+                if (egg.collidesWith(nest1)) {
+
+                    tEgg.falling = false;
+
+                }
+
+
+                if (this.y < 600 && tEgg.falling == true) {
+                    tEgg.changeYby(+5);
+                }
+
+                if (this.y > 550) {
+                    alert("You lose");
+                }
+            }
+            return tEgg;
+        }
+
+        function nest() {
+            tnest = new Sprite(scene, "birds-nest.png", 120, 60);
+            tnest.setSpeed(0);
+            tnest.setPosition(90, 330);
+            tnest.falling = true;
+            tnest.falling1 = true;
+
+            tnest.checkKeys = function () {
+                if (this.x >= 90 && tnest.falling == true && egg.collidesWith(nest)) {
+                    this.changeXby(-10);
+                } else {
+                    tnest.falling = false;
+                }
+                if (this.x <= 700 && tnest.falling == false && egg.collidesWith(nest)) {
+                    this.changeXby(10);
+                } else {
+                    tnest.falling = true;
+                }
+
+            }
+
+            tnest.checkKeys1 = function () {
+                if (this.x >= 90 && tnest.falling1 == false && !egg.collidesWith(nest)) {
+                    this.changeXby(-15);
+                } else {
+                    tnest.falling1 = true;
+                }
+                if (this.x <= 700 && tnest.falling1 == true && !egg.collidesWith(nest)) {
+                    this.changeXby(15);
+                } else {
+                    tnest.falling1 = false;
+                }
+
+            }
+
+            return tnest;
+
+        }
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        function nest1() {
+            tnest1 = new Sprite(scene, "birds-nest.png", 120, 60);
+            tnest1.setSpeed(0);
+            tnest1.setPosition(700, 400);
+            tnest1.falling = true;
+            tnest1.falling1 = true;
+
+            tnest1.checkKeys = function () {
+                if (this.x >= 90 && tnest1.falling == true && egg.collidesWith(nest1)) {
+                    this.changeXby(-10);
+                } else {
+                    tnest1.falling = false;
+                }
+                if (this.x <= 700 && tnest1.falling == false && egg.collidesWith(nest1)) {
+                    this.changeXby(10);
+                } else {
+                    tnest1.falling = true;
+                }
+
+            }
+
+            tnest1.checkKeys1 = function () {
+                if (this.x >= 90 && tnest1.falling1 == true && !egg.collidesWith(nest1)) {
+                    this.changeXby(-15);
+                } else {
+                    tnest1.falling1 = false;
+                }
+                if (this.x <= 700 && tnest1.falling1 == false && !egg.collidesWith(nest1)) {
+                    this.changeXby(15);
+                } else {
+                    tnest1.falling1 = true;
+                }
+
+            }
+
+            return tnest1;
+
+        }
+
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        function init() {
+            scene = new Scene();
+            bg = new Sprite(scene, "bg.jpg", 800, 600);
+            bg.setPosition(400, 300);
+            bg.setSpeed(0);
+            egg = new Egg();
+            nest = new nest();
+            nest1 = new nest1();
+
+            //egg.checkKeys();
+            scene.start();
+        } // end init 
+        function update() {
+            scene.clear();
+            bg.update();
+            egg.checkDrag();
+            if (tEgg.y == 400) {
+                tEgg.falling = true;
+            }
+            //egg.checkLanding();
+            egg.checkKeys();
+            nest.checkKeys();
+            nest.checkKeys1()
+            nest1.checkKeys();
+            nest1.checkKeys1();
+            ////////////////////////////////////////////////////////////////
+            if (egg.collidesWith(nest)) {
+                egg.x = (nest.x);
+                (nest).changeYby(0.5);
+                score ++ ;
+            }
+
+            if (!egg.collidesWith(nest)) {
+                (nest).changeYby(9);
+                //nest.changeXby(-5);
+
+
+            }
+            //////////////////////////////////////////////////////////////   
+            if (egg.collidesWith(nest1)) {
+                egg.x = (nest1.x);
+                (nest1).changeYby(0.5);
+                score ++ ;
+            }
+
+            if (!egg.collidesWith(nest1)) {
+                (nest1).changeYby(9);
+                //nest1.changeXby(10);
+            }
+
+            nest.update();
+            nest1.update();
+            egg.update();
+        }
+
+    </script>
+</head>
+
+<body onload="init()" style="margin-left:20%">
+    <div id="carCounter" style="font-size:30px">
+        Score: 1
+    </div>
+    
+</body>
+
+</html>
